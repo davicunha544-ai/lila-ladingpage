@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LILA — Sua estilista pessoal com IA · Acesso antecipado</title>
+<meta name="description" content="A LILA está chegando: sua estilista pessoal com IA que monta o look perfeito com as roupas que você já tem. Entre na lista e ganhe 1 mês grátis.">
+<!-- DEV: trocar as URLs abaixo pelo domínio real quando publicar -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="LILA — Sua estilista pessoal com IA">
+<meta property="og:description" content="Monte o look perfeito com as roupas que você já tem. Entre na lista de acesso antecipado e ganhe 1 mês grátis. 💕">
+<meta property="og:image" content="lila_cena.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="lila_app_icon_final_rounded.png">
+<link rel="apple-touch-icon" href="lila_app_icon_final_rounded.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --pink:#E8387A; --pink-l:#F274A2; --pink-pale:#FDE8F1; --pink-dark:#B82060;
+  --blush-1:#FFFCFE; --blush-2:#FFF4F9; --blush-3:#F7DCE8; --gold:#C99A6A;
+  --white:#FFF; --g200:#ECEAEC; --g500:#9E9AA0; --g700:#56525A; --ink:#2A2230;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+}
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
+  background:linear-gradient(180deg, var(--blush-1) 0%, var(--blush-2) 50%, #FDEEF5 100%);
+  min-height:100vh; padding:0 22px 60px; position:relative; overflow-x:hidden;
+}
+/* ORBES (mais suaves / arejado) */
+.bg-orb{ position:fixed; border-radius:50%; filter:blur(80px); opacity:.4; z-index:0; pointer-events:none; }
+.orb1{ width:480px; height:480px; background:radial-gradient(circle,#FFAACF,transparent 70%); top:-130px; right:-100px; animation:float1 15s ease-in-out infinite; }
+.orb2{ width:400px; height:400px; background:radial-gradient(circle,#FFD2E5,transparent 70%); bottom:-130px; left:-110px; animation:float2 18s ease-in-out infinite; }
+.orb3{ width:320px; height:320px; background:radial-gradient(circle,#FFE7C4,transparent 70%); top:42%; left:44%; opacity:.3; animation:float1 22s ease-in-out infinite; }
+@keyframes float1{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(-32px,36px); } }
+@keyframes float2{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(36px,-32px); } }
+.wrap{ max-width:1080px; margin:0 auto; position:relative; z-index:1; }
+
+/* REVEAL ao rolar */
+.reveal{ opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+.reveal.in{ opacity:1; transform:none; }
+
+/* NAV */
+.nav{ display:flex; align-items:center; justify-content:space-between; padding:24px 0; }
+.nav .brand{ display:flex; align-items:center; gap:11px; }
+.nav .blogo{ width:44px; height:44px; border-radius:13px; background:var(--pink); overflow:hidden; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 22px rgba(232,56,122,0.34), inset 0 2px 4px rgba(255,255,255,0.4); }
+.nav .blogo img{ width:100%; height:100%; object-fit:cover; }
+.nav .bname{ font-family:var(--serif); font-size:24px; font-weight:600; letter-spacing:1px; color:var(--pink); }
+.nav-right{ display:flex; align-items:center; gap:12px; }
+.nav .ig{ width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.7); border:1px solid var(--pink-pale); display:flex; align-items:center; justify-content:center; text-decoration:none; }
+.nav .tag{ font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--pink-dark); background:rgba(255,255,255,0.7); border:1px solid var(--pink-pale); padding:6px 13px; border-radius:30px; box-shadow:0 6px 16px rgba(232,56,122,0.08); }
+
+/* HERO */
+.hero{ display:grid; grid-template-columns:1.05fr 0.95fr; align-items:center; gap:44px; padding:30px 0 16px; perspective:1400px; }
+.hero-copy{ animation:rise .8s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes rise{ from{ opacity:0; transform:translateY(26px); } to{ opacity:1; transform:translateY(0); } }
+.gift-pill{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--pink-dark); background:#fff; border:1px solid var(--pink-pale); padding:8px 15px; border-radius:30px; box-shadow:0 12px 26px rgba(232,56,122,0.14); }
+.gift-pill .blink{ width:7px; height:7px; border-radius:50%; background:var(--pink); box-shadow:0 0 0 0 rgba(232,56,122,.5); animation:blink 2s infinite; }
+@keyframes blink{ 0%{ box-shadow:0 0 0 0 rgba(232,56,122,.5);} 70%{ box-shadow:0 0 0 8px rgba(232,56,122,0);} 100%{ box-shadow:0 0 0 0 rgba(232,56,122,0);} }
+h1{ font-family:var(--serif); font-weight:600; font-size:50px; line-height:1.03; letter-spacing:-0.5px; margin:18px 0 0; text-shadow:0 2px 0 rgba(255,255,255,0.6); }
+h1 em{ font-style:italic; color:var(--pink); text-shadow:0 2px 14px rgba(232,56,122,0.18); }
+.sub{ font-size:16px; line-height:1.6; color:var(--g700); margin:18px 0 22px; max-width:480px; }
+
+/* PROVA SOCIAL */
+.proof{ display:flex; align-items:center; gap:13px; margin-bottom:22px; }
+.avatars{ display:flex; }
+.avatars img{ width:36px; height:36px; border-radius:50%; border:2px solid #fff; object-fit:cover; margin-left:-11px; box-shadow:0 4px 10px rgba(42,34,48,0.12); }
+.avatars img:first-child{ margin-left:0; }
+.proof .pt b{ font-weight:700; color:var(--ink); }
+.proof .pt{ font-size:12.5px; color:var(--g700); line-height:1.35; }
+.proof .stars{ color:#F2B705; letter-spacing:1px; font-size:12px; }
+
+/* FORM */
+.form-card{ background:rgba(255,255,255,0.78); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,0.95); border-radius:24px; padding:24px; max-width:480px; position:relative;
+  box-shadow:0 30px 60px rgba(232,56,122,0.14), 0 6px 14px rgba(232,56,122,0.07), inset 0 1px 0 rgba(255,255,255,0.9); transform:translateZ(40px); }
+.form-card label{ display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--g700); margin:0 0 6px 2px; }
+.form-card input{ width:100%; font-family:var(--sans); font-size:14px; color:var(--ink); background:rgba(255,249,252,0.9); border:1.5px solid var(--g200); border-radius:13px; padding:13px 15px; margin-bottom:12px; outline:none; transition:.15s; box-shadow:inset 0 2px 5px rgba(42,34,48,0.04); }
+.form-card input:focus{ border-color:var(--pink); background:#fff; box-shadow:0 0 0 4px rgba(232,56,122,0.10); }
+.btn-shine{ position:relative; overflow:hidden; width:100%; font-family:var(--sans); font-size:15px; font-weight:700; color:#fff; border:none; border-radius:14px; padding:15px; cursor:pointer; transition:.18s;
+  background:linear-gradient(180deg,var(--pink-l),var(--pink) 60%,var(--pink-dark)); box-shadow:0 14px 28px rgba(232,56,122,0.40), inset 0 1px 0 rgba(255,255,255,0.45); }
+.btn-shine:hover{ transform:translateY(-2px); box-shadow:0 20px 36px rgba(232,56,122,0.48); }
+.btn-shine:active{ transform:translateY(0); }
+.btn-shine::after{ content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; transform:skewX(-20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent); animation:shine 3.4s ease-in-out infinite; }
+@keyframes shine{ 0%{ left:-60%; } 55%{ left:130%; } 100%{ left:130%; } }
+.fineprint{ font-size:11.5px; color:var(--g500); text-align:center; margin-top:12px; }
+.success{ display:none; text-align:center; padding:12px 6px; }
+.success .ck{ width:64px; height:64px; border-radius:50%; background:linear-gradient(140deg,var(--pink-pale),#FFD7E7); display:flex; align-items:center; justify-content:center; margin:4px auto 14px; box-shadow:0 10px 24px rgba(232,56,122,0.22); animation:pop .5s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes pop{ from{ transform:scale(0); } to{ transform:scale(1); } }
+.success h3{ font-family:var(--serif); font-size:23px; font-weight:600; margin-bottom:8px; }
+.success p{ font-size:13.5px; line-height:1.55; color:var(--g700); max-width:340px; margin:0 auto; }
+.success .free{ display:inline-block; margin-top:14px; font-size:12px; font-weight:700; color:var(--pink-dark); background:var(--pink-pale); padding:8px 14px; border-radius:30px; }
+.refer{ margin-top:18px; padding-top:16px; border-top:1px dashed var(--pink-pale); }
+.refer p{ font-size:12px; color:var(--g700); margin-bottom:10px; }
+.refer .rbtns{ display:flex; gap:8px; justify-content:center; }
+.refer a{ text-decoration:none; font-size:12px; font-weight:700; padding:9px 14px; border-radius:30px; border:1.5px solid var(--pink); color:var(--pink); transition:.15s; }
+.refer a:hover{ background:var(--pink); color:#fff; }
+
+/* CENA 3D DA AVATAR (com fade nas bordas) */
+.hero-art{ position:relative; display:flex; justify-content:center; transform-style:preserve-3d; will-change:transform; transition:transform .25s ease-out; }
+.ring{ position:absolute; top:50%; left:50%; border-radius:50%; border:1.5px dashed rgba(232,56,122,0.28); transform:translate(-50%,-50%); }
+.ring.r1{ width:430px; height:430px; animation:spin 26s linear infinite; }
+.ring.r2{ width:350px; height:350px; border-color:rgba(232,56,122,0.16); animation:spin 20s linear infinite reverse; }
+@keyframes spin{ from{ transform:translate(-50%,-50%) rotate(0); } to{ transform:translate(-50%,-50%) rotate(360deg); } }
+.halo{ position:relative; width:380px; max-width:100%; aspect-ratio:1; border-radius:50%; transform:translateZ(50px);
+  background:radial-gradient(circle at 50% 40%, #fff 0%, var(--blush-3) 50%, rgba(253,232,241,0.6) 100%);
+  box-shadow:0 50px 90px rgba(232,56,122,0.22), 0 16px 30px rgba(232,56,122,0.12), inset 0 0 0 1px rgba(255,255,255,0.7); animation:bob 6s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{ transform:translateZ(50px) translateY(0); } 50%{ transform:translateZ(50px) translateY(-14px); } }
+.halo img{ width:100%; height:100%; object-fit:cover; object-position:center 16%; border-radius:50%;
+  -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 56%, rgba(0,0,0,0.35) 68%, transparent 78%);
+  mask-image:radial-gradient(circle at 50% 46%, #000 56%, rgba(0,0,0,0.35) 68%, transparent 78%); }
+.halo .fb{ display:none; flex-direction:column; align-items:center; justify-content:center; gap:10px; width:100%; height:100%; }
+.halo .fb span{ font-family:var(--serif); font-style:italic; font-size:20px; color:var(--pink-dark); }
+.art-chip{ position:absolute; background:#fff; border-radius:16px; padding:11px 15px; display:flex; align-items:center; gap:10px; transform:translateZ(95px); box-shadow:0 22px 44px rgba(42,34,48,0.18), inset 0 1px 0 rgba(255,255,255,0.8); }
+.art-chip .ic{ width:30px; height:30px; border-radius:10px; background:var(--pink-pale); display:flex; align-items:center; justify-content:center; }
+.art-chip b{ font-size:12px; font-weight:700; display:block; } .art-chip small{ font-size:10px; color:var(--g500); }
+.chip-a{ top:24px; left:-8px; animation:bob 5s ease-in-out infinite; }
+.chip-b{ bottom:42px; right:-14px; animation:bob 5s ease-in-out infinite .8s; }
+.spark{ position:absolute; transform:translateZ(120px); animation:bob 4.5s ease-in-out infinite; }
+.sp1{ top:6%; right:16%; font-size:24px; } .sp2{ bottom:12%; left:8%; font-size:22px; animation-delay:1.2s; } .sp3{ top:44%; right:0; font-size:16px; animation-delay:.6s; }
+
+/* SHOWCASE */
+.showcase{ margin-top:80px; }
+.show-head{ text-align:center; margin-bottom:30px; }
+.eb{ font-size:10.5px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--pink); }
+.show-head h2{ font-family:var(--serif); font-size:32px; font-weight:600; margin-top:6px; }
+.show-head p{ font-size:14px; color:var(--g700); margin-top:8px; max-width:480px; margin-left:auto; margin-right:auto; }
+.show-stage{ perspective:1500px; display:flex; justify-content:center; position:relative; }
+.show-glow{ position:absolute; width:60%; height:70%; top:16%; background:radial-gradient(circle,rgba(232,56,122,0.30),transparent 70%); filter:blur(70px); z-index:0; }
+.show-frame{ position:relative; z-index:1; max-width:660px; width:100%; border-radius:26px; overflow:hidden; border:8px solid #fff;
+  box-shadow:0 60px 100px rgba(232,56,122,0.26), 0 18px 34px rgba(232,56,122,0.14);
+  transform:rotateY(-9deg) rotateX(5deg); transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+.show-frame:hover{ transform:rotateY(0) rotateX(0) scale(1.01); }
+.show-frame img{ width:100%; display:block; }
+
+/* FEATURES (vidro mais transparente) */
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:42px; perspective:900px; }
+.feat{ background:rgba(255,255,255,0.55); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.9); border-radius:22px; padding:24px; transition:transform .25s ease, box-shadow .25s ease; box-shadow:0 14px 34px rgba(232,56,122,0.07); transform-style:preserve-3d; }
+.feat:hover{ transform:translateY(-6px) rotateX(6deg) rotateY(-4deg); box-shadow:0 30px 56px rgba(232,56,122,0.16); }
+.feat .fi{ width:46px; height:46px; border-radius:14px; background:linear-gradient(140deg,var(--pink-pale),#FFD7E7); display:flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 8px 18px rgba(232,56,122,0.16); transform:translateZ(30px); }
+.feat h4{ font-family:var(--serif); font-size:17px; font-weight:600; margin-bottom:5px; }
+.feat p{ font-size:12.5px; line-height:1.55; color:var(--g700); }
+
+/* DEPOIMENTOS */
+.tst{ margin-top:80px; text-align:center; }
+.tst h2{ font-family:var(--serif); font-size:32px; font-weight:600; margin-top:6px; }
+.tcards{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:30px; text-align:left; }
+.tcard{ background:rgba(255,255,255,0.6); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.9); border-radius:20px; padding:22px; box-shadow:0 12px 30px rgba(232,56,122,0.07); }
+.tcard .qt{ color:var(--pink); font-family:var(--serif); font-size:34px; line-height:0; }
+.tcard p{ font-size:13.5px; line-height:1.55; color:var(--ink); margin:10px 0 16px; }
+.tperson{ display:flex; align-items:center; gap:10px; }
+.tperson img{ width:38px; height:38px; border-radius:50%; object-fit:cover; }
+.tperson b{ font-size:12.5px; display:block; } .tperson span{ font-size:11px; color:var(--g500); }
+
+/* FAQ */
+.faqs{ max-width:680px; margin:30px auto 0; }
+.faq-item{ background:rgba(255,255,255,0.6); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.9); border-radius:16px; padding:4px 18px; margin-bottom:11px; box-shadow:0 8px 22px rgba(232,56,122,0.05); }
+.faq-item summary{ list-style:none; cursor:pointer; font-size:14px; font-weight:700; color:var(--ink); padding:15px 0; display:flex; align-items:center; justify-content:space-between; }
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{ content:'+'; font-size:20px; color:var(--pink); font-weight:400; transition:.2s; }
+.faq-item[open] summary::after{ transform:rotate(45deg); }
+.faq-item p{ font-size:13px; line-height:1.6; color:var(--g700); padding:0 0 16px; }
+
+/* STEPS */
+.steps-head{ text-align:center; margin:80px 0 28px; }
+.steps-head h2{ font-family:var(--serif); font-size:32px; font-weight:600; margin-top:6px; }
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; perspective:900px; }
+.step{ text-align:center; padding:26px 16px; background:rgba(255,255,255,0.5); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.9); border-radius:20px; transition:transform .25s ease, box-shadow .25s; box-shadow:0 10px 26px rgba(232,56,122,0.05); }
+.step:hover{ transform:translateY(-5px) rotateX(5deg); box-shadow:0 24px 46px rgba(232,56,122,0.13); }
+.step .num{ font-family:var(--serif); font-size:34px; font-weight:600; color:var(--pink); text-shadow:0 6px 14px rgba(232,56,122,0.22); }
+.step h4{ font-size:14px; font-weight:700; margin:6px 0 5px; }
+.step p{ font-size:12.5px; line-height:1.55; color:var(--g700); }
+
+/* CTA FINAL */
+.cta-final{ text-align:center; margin-top:70px; background:linear-gradient(135deg, rgba(255,255,255,0.7), rgba(253,232,241,0.7)); border:1px solid rgba(255,255,255,0.9); border-radius:28px; padding:46px 24px; box-shadow:0 24px 60px rgba(232,56,122,0.12); }
+.cta-final h2{ font-family:var(--serif); font-size:30px; font-weight:600; }
+.cta-final p{ font-size:14px; color:var(--g700); margin:10px auto 22px; max-width:420px; }
+.cta-final a{ display:inline-block; font-family:var(--sans); font-size:15px; font-weight:700; color:#fff; text-decoration:none; border-radius:14px; padding:15px 30px;
+  background:linear-gradient(180deg,var(--pink-l),var(--pink) 60%,var(--pink-dark)); box-shadow:0 16px 32px rgba(232,56,122,0.40), inset 0 1px 0 rgba(255,255,255,0.45); transition:.18s; }
+.cta-final a:hover{ transform:translateY(-2px); box-shadow:0 22px 40px rgba(232,56,122,0.5); }
+
+/* SELO DE CONFIANÇA (prova social honesta) */
+.trust{ display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:var(--pink-dark); background:rgba(255,255,255,0.8); border:1px solid var(--pink-pale); padding:9px 16px; border-radius:30px; box-shadow:0 8px 20px rgba(232,56,122,0.08); }
+
+/* CTA FLUTUANTE */
+.float-cta{ position:fixed; bottom:22px; right:22px; z-index:60; opacity:0; transform:translateY(22px) scale(.92); pointer-events:none; transition:.3s cubic-bezier(.2,.8,.2,1); }
+.float-cta.show{ opacity:1; transform:none; pointer-events:auto; }
+.float-cta a{ display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-family:var(--sans); font-weight:700; font-size:14px; color:#fff; padding:14px 24px; border-radius:30px;
+  background:linear-gradient(180deg,var(--pink-l),var(--pink) 60%,var(--pink-dark)); box-shadow:0 16px 34px rgba(232,56,122,0.46), inset 0 1px 0 rgba(255,255,255,0.45); }
+@media (max-width:860px){ .float-cta{ left:16px; right:16px; bottom:14px; } .float-cta a{ width:100%; justify-content:center; } }
+
+/* FOOTER */
+.foot{ margin-top:54px; border-top:1px solid var(--pink-pale); padding-top:24px; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.foot .fb2{ display:flex; align-items:center; gap:9px; }
+.foot .fl2{ width:28px; height:28px; border-radius:8px; background:var(--pink); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.foot .fl2 img{ width:100%; height:100%; object-fit:cover; }
+.foot b{ font-family:var(--serif); font-size:14px; }
+.foot small{ font-size:11px; color:var(--g500); }
+.logo-svg{ width:60%; height:60%; }
+
+@media (max-width:860px){
+  .hero{ grid-template-columns:1fr; text-align:center; }
+  .sub{ margin-left:auto; margin-right:auto; } .form-card{ margin:0 auto; } .proof{ justify-content:center; }
+  .gift-pill{ margin:0 auto; } h1{ font-size:38px; }
+  .hero-art{ order:-1; margin-bottom:10px; } .halo{ width:268px; }
+  .ring.r1{ width:320px; height:320px; } .ring.r2{ width:258px; height:258px; }
+  .feats,.steps,.tcards{ grid-template-columns:1fr; }
+  .show-frame{ transform:none; } .foot{ flex-direction:column; }
+}
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; } .reveal{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+<div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div>
+<div class="wrap">
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="brand">
+      <div class="blogo"><img src="lila_app_icon_final_rounded.png" alt="LILA" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend','<svg class=\'logo-svg\' viewBox=\'0 0 80 80\' fill=\'none\'><circle cx=\'52\' cy=\'15\' r=\'7\' fill=\'white\'/><path d=\'M16 66 C16 54 19 42 25 35 C30 29 36 28 41 31 L52 22 C57 17 62 17 66 22 C70 28 67 38 59 46 L48 54 C37 62 26 66 16 66Z\' fill=\'white\'/></svg>')"/></div>
+      <div class="bname">LILA AI</div>
+    </div>
+    <div class="nav-right">
+      <a class="ig" href="https://instagram.com/lilaaioficial" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#E8387A" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="#E8387A" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="#E8387A"/></svg>
+      </a>
+      <div class="tag">Acesso antecipado</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-copy">
+      <span class="gift-pill"><span class="blink"></span> Acesso antecipado + 1 mês grátis</span>
+      <h1>Seja a primeira a vestir-se com a <em>Lila.</em></h1>
+      <p class="sub">A LILA está chegando: sua estilista pessoal com IA que monta o look perfeito com as roupas que você já tem. São apenas <strong>R$ 9,99/mês</strong> — e quem entra na lista agora garante <strong>acesso antecipado + 1 mês grátis</strong>.</p>
+
+      <div class="proof">
+        <span class="trust">🔒 Vagas limitadas para o acesso antecipado</span>
+      </div>
+
+      <div class="form-card">
+        <form id="wl-form" onsubmit="return joinWaitlist(event)">
+          <!-- DEV: para coletar e-mails de verdade, troque por um serviço como Formspree/Mailchimp.
+               Ex.: <form action="https://formspree.io/f/SEU_ID" method="POST"> e remova o onsubmit. -->
+          <label for="wl-name">Seu nome</label>
+          <input id="wl-name" name="nome" type="text" placeholder="Como podemos te chamar?" autocomplete="name">
+          <label for="wl-email">Seu melhor e-mail</label>
+          <input id="wl-email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required>
+          <button type="submit" class="btn-shine">Quero acesso antecipado</button>
+          <div class="fineprint">🔒 Sem spam. Vagas limitadas para o acesso antecipado.</div>
+        </form>
+        <div id="wl-success" class="success">
+          <div class="ck"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 6.5" stroke="#E8387A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Você está na lista! 💕</h3>
+          <p>Vamos te enviar um e-mail com seu convite assim que a LILA estiver pronta.</p>
+          <span class="free">🎁 Garantido: 1 mês grátis no lançamento</span>
+          <div class="refer">
+            <p><strong>Quer furar a fila?</strong> Convide amigas — a cada amiga que entrar, você sobe na lista. 💕</p>
+            <div class="rbtns">
+              <a href="https://wa.me/?text=Entrei%20na%20lista%20da%20LILA%2C%20a%20estilista%20com%20IA!%20Entra%20tamb%C3%A9m%20e%20ganhe%201%20m%C3%AAs%20gr%C3%A1tis%20%F0%9F%92%95" target="_blank" rel="noopener">Convidar no WhatsApp</a>
+              <a href="https://instagram.com/lilaaioficial" target="_blank" rel="noopener">Compartilhar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-art" id="art">
+      <div class="ring r1"></div><div class="ring r2"></div>
+      <div class="spark sp1">✨</div><div class="spark sp2">💕</div><div class="spark sp3">✦</div>
+      <div class="halo">
+        <img src="lila_avatar.png" alt="Lila, sua estilista com IA" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+        <div class="fb"><svg width="86" height="86" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#E8387A" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#E8387A" stroke-width="1.6"/></svg><span>Lila</span></div>
+      </div>
+      <div class="art-chip chip-a"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill="#E8387A"/></svg></div><div><b>Look pronto</b><small>em segundos</small></div></div>
+      <div class="art-chip chip-b"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.7 1-1a5.5 5.5 0 0 0 0-7.9z" fill="#E8387A"/></svg></div><div><b>1 mês grátis</b><small>p/ quem entra agora</small></div></div>
+    </div>
+  </div>
+
+  <!-- SHOWCASE -->
+  <section class="showcase reveal">
+    <div class="show-head">
+      <span class="eb">Conheça a Lila</span>
+      <h2>Sua estilista, sempre por perto</h2>
+      <p>Ela conhece seu guarda-roupa, entende a ocasião e monta o look ideal — em segundos.</p>
+    </div>
+    <div class="show-stage">
+      <div class="show-glow"></div>
+      <div class="show-frame"><img src="lila_cena.png" alt="Lila, sua estilista com IA" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#F274A2,#B82060)'; this.parentElement.style.minHeight='320px'; this.remove();"/></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <div class="feats reveal">
+    <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#E8387A" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#E8387A" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#E8387A" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#E8387A" stroke-width="1.8"/></svg></div><h4>Guarda-roupa digital</h4><p>Cadastre suas peças e tenha todo o seu armário organizado na palma da mão.</p></div>
+    <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="#E8387A" stroke-width="1.8" stroke-linejoin="round"/></svg></div><h4>Looks com IA</h4><p>A Lila combina suas roupas e cria o look ideal para cada ocasião.</p></div>
+    <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#E8387A" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#E8387A" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="#E8387A" stroke-width="1.8" stroke-linecap="round"/></svg></div><h4>Comunidade & prêmios</h4><p>Poste seus looks e dispute temporadas por vouchers em lojas parceiras.</p></div>
+  </div>
+
+  <!-- COMO FUNCIONA -->
+  <div class="steps-head reveal"><span class="eb">Como funciona</span><h2>Garanta seu lugar em 3 passos</h2></div>
+  <div class="steps reveal">
+    <div class="step"><div class="num">1</div><h4>Entre na lista</h4><p>Deixe seu nome e e-mail. Leva 10 segundos.</p></div>
+    <div class="step"><div class="num">2</div><h4>Receba seu convite</h4><p>Te avisamos por e-mail assim que o app estiver pronto.</p></div>
+    <div class="step"><div class="num">3</div><h4>Ganhe 1 mês grátis</h4><p>Por entrar cedo, seu primeiro mês é por nossa conta. 💕</p></div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="steps-head reveal"><span class="eb">Perguntas frequentes</span><h2>Ficou com dúvida?</h2></div>
+  <div class="faqs reveal">
+    <details class="faq-item" open><summary>Quando o app vai lançar?</summary><p>Estamos nos ajustes finais. Quem está na lista é avisado por e-mail em primeira mão, antes do lançamento público.</p></details>
+    <details class="faq-item"><summary>Quanto custa?</summary><p>A LILA custa <strong>R$ 9,99/mês</strong>. Quem entra pela lista de pré-lançamento ganha o <strong>primeiro mês grátis</strong> e acesso antecipado ao app.</p></details>
+    <details class="faq-item"><summary>Como funciona o acesso antecipado?</summary><p>Você entra na lista agora. Assim que abrirmos as primeiras vagas, recebe um convite exclusivo por e-mail para usar o app antes de todo mundo.</p></details>
+    <details class="faq-item"><summary>Preciso fotografar todas as minhas roupas?</summary><p>Não! Você cadastra as peças no seu ritmo. Quanto mais a Lila conhece seu guarda-roupa, melhores ficam as sugestões.</p></details>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="cta-final reveal">
+    <span class="eb">Última chamada</span>
+    <h2>Seu próximo look favorito está te esperando</h2>
+    <p>Entre na lista hoje: apenas R$ 9,99/mês e o <strong>primeiro mês é grátis</strong> para quem garante o acesso antecipado.</p>
+    <a href="#wl-form" onclick="document.getElementById('wl-name').focus()">Quero meu acesso antecipado 🎁</a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="fb2"><div class="fl2"><img src="lila_app_icon_final_rounded.png" alt="L" onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=\'0 0 28 28\' fill=\'none\'><circle cx=\'18\' cy=\'6\' r=\'3\' fill=\'white\'/><path d=\'M5 23 C5 17 7 12 11 9 C14 7 17 9 18 7 C20 5 22 5 24 8 C26 11 23 16 19 18 L14 21 C10 23 7 24 5 23Z\' fill=\'white\'/></svg>'"/></div><b>LILA</b></div>
+    <small>© 2026 LILA · @lilaaioficial · Viste-se com intenção.</small>
+  </div>
+
+</div>
+
+<!-- CTA FLUTUANTE -->
+<div class="float-cta" id="floatCta"><a href="#wl-form" onclick="document.getElementById('wl-name').focus()">🎁 Quero acesso antecipado</a></div>
+
+<script>
+function joinWaitlist(e){
+  e.preventDefault();
+  var email = document.getElementById('wl-email').value.trim();
+  if(!email || email.indexOf('@') < 1){ document.getElementById('wl-email').focus(); return false; }
+  document.getElementById('wl-form').style.display = 'none';
+  document.getElementById('wl-success').style.display = 'block';
+  return false;
+}
+/* Tilt 3D da cena */
+(function(){
+  var art = document.getElementById('art');
+  var hero = document.querySelector('.hero');
+  if(!art || !hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  hero.addEventListener('mousemove', function(ev){
+    var r = hero.getBoundingClientRect();
+    var x = (ev.clientX - r.left)/r.width - 0.5;
+    var y = (ev.clientY - r.top)/r.height - 0.5;
+    art.style.transform = 'rotateY(' + (x*14) + 'deg) rotateX(' + (-y*14) + 'deg)';
+  });
+  hero.addEventListener('mouseleave', function(){ art.style.transform = 'rotateY(0) rotateX(0)'; });
+})();
+/* Reveal ao rolar */
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(el){ el.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold:0.12 });
+  els.forEach(function(el){ io.observe(el); });
+})();
+/* CTA flutuante: aparece ao rolar para fora do topo */
+(function(){
+  var cta = document.getElementById('floatCta');
+  if(!cta) return;
+  function onScroll(){
+    if(window.scrollY > 620){ cta.classList.add('show'); }
+    else { cta.classList.remove('show'); }
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
