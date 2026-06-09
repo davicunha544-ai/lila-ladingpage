@@ -53,6 +53,12 @@ body{ font-family:var(--sans); color:var(--ink); background:var(--bg); -webkit-f
 .btn{ display:inline-block; width:100%; text-align:center; background:var(--pink); color:#fff; border:none; border-radius:999px; padding:17px 30px; font-family:var(--sans); font-size:12px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; cursor:pointer; transition:background .2s; }
 .btn:hover{ background:var(--pink-d); }
 .fineprint{ font-size:11px; letter-spacing:.3px; color:var(--muted); margin-top:16px; }
+.lgpd-row{ display:flex; align-items:flex-start; gap:10px; margin:18px 0 20px; }
+.lgpd-row input[type=checkbox]{ margin-top:3px; flex-shrink:0; accent-color:var(--pink); width:16px; height:16px; cursor:pointer; }
+.lgpd-row label{ font-size:11px; color:var(--muted); line-height:1.55; cursor:pointer; }
+.lgpd-row label a{ color:var(--ink); text-decoration:underline; }
+.form-msg{ font-size:12px; margin-top:10px; min-height:18px; }
+.form-msg.err{ color:#B82060; }
 
 /* Imagem da Lila — circular, suave, sem decoração */
 .hero-img{ display:flex; justify-content:center; }
@@ -144,13 +150,16 @@ body{ font-family:var(--sans); color:var(--ink); background:var(--bg); -webkit-f
       <h1>Seja a primeira a vestir-se com a <em>Lila.</em></h1>
       <p class="sub">Sua estilista pessoal com IA que monta o look perfeito com as roupas que você já tem.</p>
 
-      <form class="form" id="wl-form" onsubmit="return joinWaitlist(event)">
-        <!-- DEV: para coletar os e-mails, troque por Formspree/Mailchimp:
-             <form action="https://formspree.io/f/SEU_ID" method="POST"> e remova o onsubmit. -->
+      <form class="form" id="wl-form" onsubmit="return joinWaitlist(event)" data-list-id="__BREVO_LIST_ID__">
         <div class="fld"><label for="wl-name">Nome</label><input id="wl-name" name="nome" type="text" placeholder="Como podemos te chamar?" autocomplete="name"></div>
         <div class="fld"><label for="wl-email">E-mail</label><input id="wl-email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required></div>
-        <button type="submit" class="btn">Quero acesso antecipado</button>
+        <div class="lgpd-row">
+          <input type="checkbox" id="wl-consent" name="consent" required>
+          <label for="wl-consent">Concordo que a LILA armazene meu e-mail para me avisar sobre o lançamento e enviar informações do produto. Sem spam — cancele quando quiser.</label>
+        </div>
+        <button type="submit" class="btn" id="wl-btn">Quero acesso antecipado</button>
         <p class="fineprint">Sem spam. Vagas limitadas.</p>
+        <p class="form-msg" id="wl-msg" aria-live="polite"></p>
       </form>
 
       <div class="success" id="wl-success">
@@ -219,12 +228,62 @@ body{ font-family:var(--sans); color:var(--ink); background:var(--bg); -webkit-f
 </div>
 
 <script>
-function joinWaitlist(e){
+var BREVO_API_KEY = '__BREVO_API_KEY__'; // injetado pelo GitHub Actions — não editar aqui
+
+function joinWaitlist(e) {
   e.preventDefault();
-  var email = document.getElementById('wl-email').value.trim();
-  if(!email || email.indexOf('@') < 1){ document.getElementById('wl-email').focus(); return false; }
-  document.getElementById('wl-form').style.display = 'none';
-  document.getElementById('wl-success').style.display = 'block';
+  var email   = document.getElementById('wl-email').value.trim();
+  var nome    = document.getElementById('wl-name').value.trim();
+  var consent = document.getElementById('wl-consent').checked;
+  var btn     = document.getElementById('wl-btn');
+  var msg     = document.getElementById('wl-msg');
+  var listId  = parseInt(document.getElementById('wl-form').dataset.listId, 10);
+
+  if (!email || email.indexOf('@') < 1) { document.getElementById('wl-email').focus(); return false; }
+  if (!consent) {
+    msg.textContent = 'Por favor, aceite os termos para continuar.';
+    msg.className = 'form-msg err';
+    return false;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+  msg.textContent = '';
+  msg.className = 'form-msg';
+
+  var payload = {
+    email: email,
+    listIds: [listId],
+    updateEnabled: false,
+    attributes: { OPT_IN_DATE: new Date().toISOString().split('T')[0], INVITE_SENT: false }
+  };
+  if (nome) payload.attributes.FNAME = nome;
+
+  fetch('https://api.brevo.com/v3/contacts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
+    body: JSON.stringify(payload)
+  })
+  .then(function(res) {
+    if (res.status === 201 || res.status === 204) return { ok: true };
+    return res.json().then(function(data) { throw new Error(data.message || 'erro'); });
+  })
+  .then(function() {
+    document.getElementById('wl-form').style.display = 'none';
+    document.getElementById('wl-success').style.display = 'block';
+  })
+  .catch(function(err) {
+    if (err.message && err.message.toLowerCase().indexOf('already') >= 0) {
+      document.getElementById('wl-form').style.display = 'none';
+      document.getElementById('wl-success').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Quero acesso antecipado';
+      msg.className = 'form-msg err';
+      msg.textContent = 'Algo deu errado. Tente novamente em instantes.';
+    }
+  });
+
   return false;
 }
 (function(){
